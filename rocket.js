@@ -70,7 +70,6 @@ function Rocket(population, dna) {
   this.hitBarrier = function () {
     for (let i = 0; i < obstacles.length; ++i) {
       if (obstacles[i].containsPoint(this.pos.x, this.pos.y)) {
-        console.log('Boom!');
         return true;
       }
     }
