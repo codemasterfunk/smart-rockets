@@ -7,7 +7,7 @@
 function Rocket(population, dna) {
   this.population = population;
   // Physics of rocket at current instance
-  this.pos = createVector(width / 2, height);
+  this.pos = createVector(width / 2, height - 5);
   this.vel = createVector();
   this.acc = createVector();
   // Checks rocket has reached target

@@ -24,7 +24,7 @@ var obstaclesCount = 5;
 var obstacles = [];
 
 function setup() {
-  createCanvas(750, 700);
+  createCanvas(750, 750);
   populations[0] = new Population(populationCount);
   lifeP = createP();
   lifeP.elt.setAttribute('style', 'white-space: pre; font-family: monospace;')
