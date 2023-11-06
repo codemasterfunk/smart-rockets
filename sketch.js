@@ -40,60 +40,72 @@ function setup() {
 }
 
 function draw() {
-  background(0);
-  let newPops = [];
-  for (let popIndex = populations.length - 1; popIndex >= 0; --popIndex) {
-    let population = populations[popIndex];
-    population.run();
-    // Displays count to window
-    let successes = population.successCount();
-    let percentageSuccessful = Math.round(successes/populationCount * 100);
-    let percentPipes = '';
-    for (let i = 0; i < percentageSuccessful; ++i) {
-      percentPipes += '|';
+  if(paused) {
+    textSize(100); 
+    text("PAUSED", 100, 150); 
+  } else {
+    background(0);
+    let newPops = [];
+    for (let popIndex = populations.length - 1; popIndex >= 0; --popIndex) {
+      let population = populations[popIndex];
+      population.run();
+      // Displays count to window
+      let successes = population.successCount();
+      let percentageSuccessful = Math.round(successes/populationCount * 100);
+      let percentPipes = '';
+      for (let i = 0; i < percentageSuccessful; ++i) {
+        percentPipes += '|';
+      }
+      for (let i = percentageSuccessful; i < 100; ++i) {
+        percentPipes += ' ';
+      }
+      lifeP.html(
+        `Generation: ${generation} Time: ${count + 1 % lifespan}/${lifespan} Successes: ${successes}/${populationCount} (${percentageSuccessful}%)\r\n[${percentPipes}]`
+      );
+  
+      count++;
+  
+      if (count % lifespan == 0 || population.allDone()) {
+        population.evaluate();
+        //population = population.nextPopulation();
+        population.rockets = population.selection();
+        count = 0;
+        generation++;
+        historyP.elt.textContent = lifeP.elt.textContent + "\r\n" + historyP.elt.textContent;
+      }
+  //     if (count % lifespan == lifespan * 3 / 4) {
+  //       population.evaluate();
+  //       let newPop = population.nextPopulation();
+  //       newPops.push(newPop);
+  //       // Population = new Population();
+  //       generation++;
+  //     }
+  
+  //     if (population.allDone()) {
+  //       console.log("all done");
+  //       populations.splice(popIndex, 1);
+  //     }
     }
-    for (let i = percentageSuccessful; i < 100; ++i) {
-      percentPipes += ' ';
+  
+    for (let i = 0; i < newPops.length; i++) {
+      populations.push(newPops[i]);
     }
-    lifeP.html(
-      `Generation: ${generation} Time: ${count + 1 % lifespan}/${lifespan} Successes: ${successes}/${populationCount} (${percentageSuccessful}%)\r\n[${percentPipes}]`
-    );
-
-    count++;
-
-    if (count % lifespan == 0 || population.allDone()) {
-      population.evaluate();
-      //population = population.nextPopulation();
-      population.rockets = population.selection();
-      count = 0;
-      generation++;
-      historyP.elt.textContent = lifeP.elt.textContent + "\r\n" + historyP.elt.textContent;
+  
+    for (let i = 0; i < obstacles.length; ++i) {
+      obstacles[i].show();
     }
-//     if (count % lifespan == lifespan * 3 / 4) {
-//       population.evaluate();
-//       let newPop = population.nextPopulation();
-//       newPops.push(newPop);
-//       // Population = new Population();
-//       generation++;
-//     }
+  
+    // Renders target
+    fill(250);
+    ellipse(target.x, target.y, 16, 16);
+    }
+}
 
-//     if (population.allDone()) {
-//       console.log("all done");
-//       populations.splice(popIndex, 1);
-//     }
+
+function keyPressed() {
+  if (key === 'p') {
+    paused = !paused;
   }
-
-  for (let i = 0; i < newPops.length; i++) {
-    populations.push(newPops[i]);
-  }
-
-  for (let i = 0; i < obstacles.length; ++i) {
-    obstacles[i].show();
-  }
-
-  // Renders target
-  fill(250);
-  ellipse(target.x, target.y, 16, 16);
 }
 
 function mouseDragged() {
