@@ -23,6 +23,7 @@ var generation = 0;
 var obstaclesCount = 5;
 var obstacles = [];
 
+var paused = false;
 function setup() {
   createCanvas(750, 750);
   populations[0] = new Population(populationCount);
@@ -40,7 +41,7 @@ function setup() {
 }
 
 function draw() {
-  if(paused) {
+  if (paused) {
     textSize(100); 
     text("PAUSED", 100, 150); 
   } else {
